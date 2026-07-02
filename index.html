@@ -4,36 +4,413 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KaiZonHub / Website</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Toàn bộ CSS được đặt nghiêm ngặt trong thẻ style này để không bị lộ code ra màn hình */
+        /* Tối ưu hóa hiệu ứng mượt mà 120Hz */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: #050505;
-            color: #ffffff;
+            background: radial-gradient(circle at top, #1a1a1a, #0a0a0a);
+            color: #fff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* Hiệu ứng Đốm mờ Đỏ Đen huyền ảo (Blur Background) */
-        body::before {
-            content: '';
+        /* Nút Menu 3 Gạch */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .menu-toggle:active {
+            transform: scale(0.9);
+        }
+
+        /* Thanh Menu Thả Xuống */
+        .dropdown-menu {
+            position: fixed;
+            top: 75px;
+            right: -200px;
+            width: 180px;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 99;
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .dropdown-menu.active {
+            right: 20px;
+        }
+
+        .menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .menu-btn.tiktok { background: rgba(255, 255, 255, 0.05); }
+        .menu-btn.tiktok i { color: #ff0050; }
+        .menu-btn.discord { background: rgba(88, 101, 242, 0.15); }
+        .menu-btn.discord i { color: #5865F2; }
+        
+        .menu-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Tiêu đề Đỏ Đen Lấp Lánh */
+        .brand-title {
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #ff0000, #000000, #ff3333, #000000);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+            filter: drop-shadow(0 2px 10px rgba(255, 0, 0, 0.2));
+        }
+
+        @keyframes shine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        /* Container chính Glassmorphism */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            margin-bottom: 25px;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #888;
+            margin-bottom: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Hệ thống điều hướng Tab */
+        .tab-navigation {
+            display: flex;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 5px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            gap: 5px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #888;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Nội dung Script */
+        .script-content {
+            display: none;
+            animation: tabFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .script-content.active {
+            display: block;
+        }
+
+        @keyframes tabFade {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Ô chứa code */
+        .code-box {
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 10px;
+        }
+
+        .code-container {
+            max-height: 120px;
+            overflow-y: auto;
+            margin-top: 35px;
+            padding-right: 5px;
+        }
+
+        /* Thanh cuộn mượt mờ */
+        .code-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .code-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: #00ffaa;
+            word-break: break-all;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        /* Nút Copy lên đầu */
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-1px);
+        }
+
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Thông báo nhỏ khi copy thành công */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <div class="dropdown-menu" id="dropdownMenu">
+        <a href="https://tiktok.com/@usertd1609" target="_blank" class="menu-btn tiktok">
+            <i class="fa-brands fa-tiktok"></i> TikTok
+        </a>
+        <a href="https://discord.gg/GqXCVwkn7" target="_blank" class="menu-btn discord">
+            <i class="fa-brands fa-discord"></i> Discord
+        </a>
+    </div>
+
+    <h1 class="brand-title">KaiZonHub Website</h1>
+
+    <div class="container">
+        <div class="section-title">
+            <i class="fa-solid fa-code"></i> Main Scripts
+        </div>
+        
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab(event, 'main-tab1', 'group1')">KaiZonHub</button>
+            <button class="tab-btn" onclick="switchTab(event, 'main-tab2', 'group1')">KaiZonHub | Auto Tech</button>
+        </div>
+
+        <div id="main-tab1" class="script-content active group1">
+            <div class="code-box">
+                <button class="copy-btn" onclick="copyScript('script1', this)">
+                    <i class="fa-regular fa-copy"></i> Copy Script
+                </button>
+                <div class="code-container">
+                    <code id="script1">loadstring(game:HttpGet("https://raw.githubusercontent.com/KaiZon189/ThanhDuyHub-Model/refs/heads/main/KaiZonHub"))()</code>
+                </div>
+            </div>
+        </div>
+
+        <div id="main-tab2" class="script-content group1">
+            <div class="code-box">
+                <button class="copy-btn" onclick="copyScript('script2', this)">
+                    <i class="fa-regular fa-copy"></i> Copy Script
+                </button>
+                <div class="code-container">
+                    <code id="script2">loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/8d6150f8cadccb27861339da3340df23f855488c3886d8e419028833c38d261e/download"))()</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section-title">
+            <i class="fa-solid fa-gamepad"></i> Blox Fruit Area
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab(event, 'bf-tab1', 'group2')">Var Hub</button>
+        </div>
+
+        <div id="bf-tab1" class="script-content active group2">
+            <div class="code-box">
+                <button class="copy-btn" onclick="copyScript('script3', this)">
+                    <i class="fa-regular fa-copy"></i> Copy Script
+                </button>
+                <div class="code-container">
+                    <code id="script3">repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-ModScript/Var-Hubs/refs/heads/main/Var%20Hub"))()</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Đã copy vào bộ nhớ tạm!</div>
+
+    <script>
+        // Hàm đóng mở Menu 3 gạch
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Đóng menu khi bấm ra ngoài không gian trống
+        window.addEventListener('click', function(e) {
+            const menu = document.getElementById('dropdownMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Hàm chuyển đổi Tab mượt mà
+        function switchTab(event, tabId, groupClass) {
+            // Lấy tất cả các nội dung thuộc group đó và ẩn đi
+            const contents = document.querySelectorAll('.' + groupClass);
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Gỡ class active của tất cả các nút cùng cấp bọc ngoài
+            const parentNav = event.currentTarget.parentElement;
+            const buttons = parentNav.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Kích hoạt tab hiện tại
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Hàm copy script chuẩn xác tuyệt đối
+        function copyScript(elementId, btn) {
+            const codeText = document.getElementById(elementId).innerText;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                // Đổi icon và chữ tạm thời trên nút
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-check" style="color: #00aa66;"></i> Copied!`;
+                
+                // Hiện toast thông báo bên dưới
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    toast.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                alert('Lỗi khi copy, vui lòng thử lại: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
             position: fixed;
             top: -20%;
             left: -20%;
