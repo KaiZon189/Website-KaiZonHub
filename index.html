@@ -16,27 +16,25 @@
     --muted:#8a8a8a;
     --red:#e11d2e;
     --red-dark:#7a0f18;
-    --ease:cubic-bezier(0.16,1,0.3,1);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{margin:0;padding:0;}
+  html, body{
+    margin:0;
+    padding:0;
+    overscroll-behavior-y:none;
+    background:var(--bg);
+  }
   body{
-    background:
-      radial-gradient(circle at 20% 0%, rgba(225,29,46,0.08), transparent 45%),
-      radial-gradient(circle at 80% 100%, rgba(255,255,255,0.03), transparent 50%),
-      var(--bg);
     color:var(--text);
     font-family:'Google Sans Text','Google Sans',system-ui,-apple-system,sans-serif;
     min-height:100vh;
-    overflow-x:hidden;
   }
 
-  /* ---------- Top bar ---------- */
   header{
     position:sticky; top:0; z-index:50;
     display:flex; align-items:center; justify-content:space-between;
     padding:16px 20px;
-    background:rgba(10,10,10,0.7);
+    background:rgba(10,10,10,0.85);
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
     border-bottom:1px solid var(--panel-border);
@@ -67,23 +65,22 @@
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     gap:4px;
     cursor:pointer;
-    transition:background 120ms var(--ease), transform 120ms var(--ease);
+    transition:transform 120ms ease;
   }
   .menu-btn:active{transform:scale(0.92);}
   .menu-btn span{
     width:18px; height:2px; background:var(--text); border-radius:2px;
-    transition:transform 180ms var(--ease), opacity 180ms var(--ease);
+    transition:transform 180ms ease, opacity 180ms ease;
   }
   .menu-btn.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
   .menu-btn.open span:nth-child(2){opacity:0;}
   .menu-btn.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 
-  /* ---------- Dropdown menu ---------- */
   .dropdown{
     position:fixed;
     top:70px; right:16px;
-    width:230px;
-    background:rgba(16,16,16,0.85);
+    width:220px;
+    background:rgba(16,16,16,0.95);
     backdrop-filter:blur(18px);
     -webkit-backdrop-filter:blur(18px);
     border:1px solid var(--panel-border);
@@ -91,10 +88,10 @@
     padding:8px;
     z-index:60;
     box-shadow:0 20px 50px rgba(0,0,0,0.6);
-    opacity:0; visibility:hidden; transform:translateY(-8px) scale(0.97);
-    transition:opacity 160ms var(--ease), transform 160ms var(--ease), visibility 160ms;
+    opacity:0; visibility:hidden; transform:translateY(-8px);
+    transition:opacity 160ms ease, transform 160ms ease, visibility 160ms;
   }
-  .dropdown.show{opacity:1; visibility:visible; transform:translateY(0) scale(1);}
+  .dropdown.show{opacity:1; visibility:visible; transform:translateY(0);}
   .dropdown a{
     display:flex; align-items:center; gap:12px;
     padding:12px 14px;
@@ -103,30 +100,26 @@
     text-decoration:none;
     font-size:14.5px;
     font-weight:500;
-    transition:background 120ms var(--ease);
   }
-  .dropdown a:hover{background:rgba(255,255,255,0.06);}
+  .dropdown a:active{background:rgba(255,255,255,0.08);}
   .dropdown a svg{width:20px; height:20px; flex-shrink:0;}
   .dropdown a:first-child svg{fill:#fff;}
   .dropdown a:last-child svg{fill:#5865F2;}
 
-  /* ---------- Layout ---------- */
   main{
-    max-width:720px;
+    max-width:700px;
     margin:0 auto;
-    padding:36px 18px 80px;
+    padding:32px 18px 60px;
   }
   .hero{
     text-align:center;
-    margin-bottom:34px;
-    animation:fadeUp 500ms var(--ease) both;
+    margin-bottom:30px;
   }
   .hero h1{
     font-family:'Google Sans',sans-serif;
-    font-size:26px;
+    font-size:24px;
     font-weight:700;
     margin:0 0 6px;
-    letter-spacing:-0.3px;
   }
   .hero p{
     color:var(--muted);
@@ -140,32 +133,24 @@
     letter-spacing:1.4px;
     color:var(--muted);
     font-weight:600;
-    margin:32px 4px 12px;
+    margin:28px 4px 12px;
   }
 
-  /* ---------- Tabs ---------- */
   .tab-card{
     background:var(--panel);
     border:1px solid var(--panel-border);
     border-radius:20px;
     padding:10px;
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    animation:fadeUp 500ms var(--ease) both;
-    animation-delay:80ms;
   }
   .tab-nav{
     display:flex;
-    gap:4px;
+    gap:6px;
     background:rgba(255,255,255,0.03);
     padding:5px;
     border-radius:14px;
-    position:relative;
   }
   .tab-btn{
     flex:1;
-    position:relative;
-    z-index:2;
     padding:10px 8px;
     background:transparent;
     border:none;
@@ -175,31 +160,24 @@
     font-weight:500;
     border-radius:10px;
     cursor:pointer;
-    transition:color 220ms var(--ease);
+    transition:background 250ms ease, color 250ms ease, box-shadow 250ms ease;
   }
-  .tab-btn.active{color:#fff; font-weight:700;}
-  .tab-indicator{
-    position:absolute;
-    top:5px; bottom:5px; left:5px;
-    width:calc(50% - 5px);
+  .tab-btn.active{
+    color:#fff;
+    font-weight:700;
     background:linear-gradient(135deg, var(--red-dark), var(--red));
-    border-radius:10px;
-    transition:transform 320ms var(--ease);
-    z-index:1;
     box-shadow:0 4px 16px rgba(225,29,46,0.35);
   }
 
-  .tab-panels{ position:relative; margin-top:12px; }
-  .tab-panel{
-    display:none;
-  }
+  .tab-panels{ margin-top:12px; }
+  .tab-panel{ display:none; }
   .tab-panel.active{
     display:block;
-    animation:panelIn 320ms var(--ease) both;
+    animation:panelIn 280ms ease both;
   }
   @keyframes panelIn{
-    from{opacity:0; transform:translateY(6px) scale(0.99);}
-    to{opacity:1; transform:translateY(0) scale(1);}
+    from{opacity:0; transform:translateY(6px);}
+    to{opacity:1; transform:translateY(0);}
   }
 
   .script-box{
@@ -230,9 +208,8 @@
     padding:7px 12px;
     border-radius:8px;
     cursor:pointer;
-    transition:background 150ms var(--ease), transform 150ms var(--ease), border-color 150ms var(--ease);
+    transition:background 150ms ease, transform 150ms ease, border-color 150ms ease;
   }
-  .copy-btn:hover{background:rgba(255,255,255,0.1);}
   .copy-btn:active{transform:scale(0.94);}
   .copy-btn.copied{
     background:rgba(225,29,46,0.18);
@@ -260,18 +237,9 @@
     padding:20px 0 40px;
   }
 
-  @keyframes fadeUp{
-    from{opacity:0; transform:translateY(14px);}
-    to{opacity:1; transform:translateY(0);}
-  }
-
   @media (max-width:480px){
-    .hero h1{font-size:22px;}
+    .hero h1{font-size:21px;}
     pre.script-code{font-size:11.5px;}
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
   }
 </style>
 </head>
@@ -301,13 +269,11 @@
     <p>Chọn script bên dưới và bấm copy để sử dụng</p>
   </section>
 
-  <!-- ===== Main Scripts ===== -->
   <div class="section-label">Script chính</div>
   <div class="tab-card">
     <div class="tab-nav">
       <button class="tab-btn active" data-tab="main-1">KaiZonHub</button>
       <button class="tab-btn" data-tab="main-2">KaiZonHub | Auto Tech</button>
-      <div class="tab-indicator" id="mainIndicator"></div>
     </div>
     <div class="tab-panels">
       <div class="tab-panel active" id="main-1">
@@ -316,6 +282,108 @@
             <span class="script-box-title">KaiZonHub.lua</span>
             <button class="copy-btn" data-target="code-main-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <pre class="script-code" id="code-main-1">loadstring(game:HttpGet("https://raw.githubusercontent.com/KaiZon189/ThanhDuyHub-Model/refs/heads/main/KaiZonHub"))()</pre>
+        </div>
+      </div>
+      <div class="tab-panel" id="main-2">
+        <div class="script-box">
+          <div class="script-box-header">
+            <span class="script-box-title">AutoTech.lua</span>
+            <button class="copy-btn" data-target="code-main-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <pre class="script-code" id="code-main-2">loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/8d6150f8cadccb27861339da3340df23f855488c3886d8e419028833c38d261e/download"))()</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Blox Fruit</div>
+  <div class="tab-card">
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="bf-1">Var Hub</button>
+    </div>
+    <div class="tab-panels">
+      <div class="tab-panel active" id="bf-1">
+        <div class="script-box">
+          <div class="script-box-header">
+            <span class="script-box-title">VarHub.lua</span>
+            <button class="copy-btn" data-target="code-bf-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <pre class="script-code" id="code-bf-1">repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-ModScript/Var-Hubs/refs/heads/main/Var%20Hub"))()</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>© KaiZonHub — Made for the community</footer>
+</main>
+
+<script>
+  var menuBtn = document.getElementById('menuBtn');
+  var dropdown = document.getElementById('dropdown');
+  menuBtn.addEventListener('click', function(){
+    menuBtn.classList.toggle('open');
+    dropdown.classList.toggle('show');
+  });
+  document.addEventListener('click', function(e){
+    if (!menuBtn.contains(e.target) && !dropdown.contains(e.target)) {
+      menuBtn.classList.remove('open');
+      dropdown.classList.remove('show');
+    }
+  });
+
+  document.querySelectorAll('.tab-card').forEach(function(card){
+    var btns = card.querySelectorAll('.tab-btn');
+    var panels = card.querySelectorAll('.tab-panel');
+    btns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        btns.forEach(function(b){ b.classList.remove('active'); });
+        panels.forEach(function(p){ p.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+  });
+
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', async function(){
+      var codeEl = document.getElementById(btn.dataset.target);
+      var text = codeEl.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (err) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      var label = btn.querySelector('span');
+      var original = label.textContent;
+      btn.classList.add('copied');
+      label.textContent = 'Copied!';
+      setTimeout(function(){
+        btn.classList.remove('copied');
+        label.textContent = original;
+      }, 1600);
+    });
+  });
+</script>
+
+</body>
+</html>
+"9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               <span>Copy</span>
             </button>
           </div>
