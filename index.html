@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KaiZonHub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -13,17 +14,17 @@
             --card-bg: rgba(255, 255, 255, 0.03);
             --card-border: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
-            --text-sub: #b3b3b3;
-            --accent-gradient: linear-gradient(45deg, #ff0000, #000000);
-            --blur-strength: 16px;
+            --text-sub: #888888;
+            --accent: #ffffff;
+            --blur-val: 16px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Space Grotesk', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
@@ -31,9 +32,336 @@
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+        }
+
+        /* Background Decorative Elements */
+        .bg-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 70%);
+            top: -100px;
+            left: -100px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* Section Styling */
+        .section-box {
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--blur-val));
+            -webkit-backdrop-filter: blur(var(--blur-val));
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .section-box:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: var(--text-main);
+            border-left: 3px solid var(--accent);
+            padding-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tab System */
+        .tabs-nav {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: color 0.2s ease;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            color: #000000;
+            font-weight: 600;
+        }
+
+        /* Thống nhất animation dịch chuyển tab slider mượt 120Hz */
+        .tab-slider {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            height: calc(100% - 8px);
+            width: calc(50% - 4px);
+            background: var(--accent);
+            border-radius: 8px;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn Content 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Script Code Box */
+        .script-container {
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .script-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 0.5rem;
+        }
+
+        .copy-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .script-box {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #d4d4d4;
+            font-family: monospace;
+            font-size: 0.85rem;
+            resize: none;
+            height: 70px;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        /* Animations định nghĩa mượt cho 120hz */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInContent {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast thông báo */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            background: #ffffff;
+            color: #000000;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 99;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <header>
+        <h1>KaiZonHub</h1>
+        <p>PREMIUM ROBLOX SCRIPTS</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="section-box">
+            <div class="section-title">KaiZonHub / Website</div>
+            
+            <div class="tabs-nav">
+                <div class="tab-slider" id="slider1"></div>
+                <button class="tab-btn active" onclick="switchTab(this, 'tab1-content1', 'slider1', 0)">KaiZonHub</button>
+                <button class="tab-btn" onclick="switchTab(this, 'tab1-content2', 'slider1', 1)">KaiZonHub | Auto Tech</button>
+            </div>
+
+            <div id="tab1-content1" class="tab-content active">
+                <div class="script-container">
+                    <div class="script-header">
+                        <button class="copy-btn" onclick="copyScript('script1')">
+                            COPY
+                        </button>
+                    </div>
+                    <textarea class="script-box" id="script1" readonly>loadstring(game:HttpGet("https://raw.githubusercontent.com/KaiZon189/ThanhDuyHub-Model/refs/heads/main/KaiZonHub"))()</textarea>
+                </div>
+            </div>
+
+            <div id="tab1-content2" class="tab-content">
+                <div class="script-container">
+                    <div class="script-header">
+                        <button class="copy-btn" onclick="copyScript('script2')">
+                            COPY
+                        </button>
+                    </div>
+                    <textarea class="script-box" id="script2" readonly>loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/8d6150f8cadccb27861339da3340df23f855488c3886d8e419028833c38d261e/download"))()</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title">Blox Fruit</div>
+            
+            <div class="tabs-nav">
+                <div class="tab-slider" id="slider2" style="width: 100%;"></div>
+                <button class="tab-btn active" style="color: #000000; cursor: default;">Var Hub</button>
+            </div>
+
+            <div class="tab-content active">
+                <div class="script-container">
+                    <div class="script-header">
+                        <button class="copy-btn" onclick="copyScript('script3')">
+                            COPY
+                        </button>
+                    </div>
+                    <textarea class="script-box" id="script3" readonly style="height: 90px;">repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-ModScript/Var-Hubs/refs/heads/main/Var%20Hub"))()</textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast">Copied to clipboard!</div>
+
+    <script>
+        // Hàm chuyển đổi Tab mượt mà tối ưu hóa tốc độ phản hồi
+        function switchTab(btn, contentId, sliderId, index) {
+            const section = btn.closest('.section-box');
+            
+            // Cập nhật trạng thái Active của Button
+            section.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Di chuyển Slider nền thanh chọn
+            const slider = document.getElementById(sliderId);
+            slider.style.transform = `translateX(${index * 100}%)`;
+            
+            // Ẩn/Hiện nội dung Script
+            section.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(contentId).classList.add('active');
+        }
+
+        // Hàm xử lý sao chép Script nhanh
+        function copyScript(id) {
+            const copyText = document.getElementById(id);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // Dành cho thiết bị di động
+
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                showToast();
+            }).catch(err => {
+                // Fallback nếu trình duyệt không hỗ trợ Clipboard API ngoài HTTPS
+                document.execCommand("copy");
+                showToast();
+            });
+        }
+
+        // Hiện thông báo pop-up khi copy thành công
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
             overflow-x: hidden;
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(255, 0, 0, 0.05) 0%, transparent 40%),
