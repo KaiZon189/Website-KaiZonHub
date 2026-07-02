@@ -4,86 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KaiZonHub / Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* CSS RESET & VARIABLES */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif; /* Font chữ tối giản, hiện đại */
-            -webkit-tap-highlight-color: transparent;
-        }
-
         :root {
             --bg-color: #0a0a0a;
-            --card-bg: rgba(20, 20, 20, 0.6);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --text-main: #ffffff;
-            --text-sub: #888888;
-            --accent: #ffffff;
+            --card-bg: rgba(20, 20, 20, 0.7);
+            --text-color: #ffffff;
+            --accent-color: #ff3333;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Geist', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-main);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        /* Giới hạn hiển thị máy tính giống hệt điện thoại */
+        .phone-container {
+            width: 100%;
+            max-width: 412px;
+            height: 100vh;
+            max-height: 892px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            position: relative;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
+            overflow-y: auto;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #141414 0%, #0a0a0a 100%);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* TỐI ƯU 120HZ & HIỆU ỨNG MƯỢT MÀ */
-        * {
-            will-change: transform, opacity;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        @media (min-width: 415px) {
+            .phone-container {
+                border-radius: 40px;
+                height: 85vh;
+            }
         }
 
-        /* LỚP THÔNG BÁO COPY (TOAST) */
-        .toast {
-            position: fixed;
-            bottom: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            color: #000;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
-            z-index: 9999;
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .toast.show {
-            bottom: 30px;
-            opacity: 1;
-        }
-
-        /* HEADER & TÊN ĐỎ ĐEN LẤP LÁNH */
+        /* Thanh điều hướng Header */
         header {
-            text-align: center;
-            margin-bottom: 40px;
-            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 10;
         }
 
+        /* Hiệu ứng tên Đỏ Đen lấp lánh */
         .web-title {
-            font-size: 2.5rem;
-            font-weight: 800;
+            font-size: 1.2rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #ff0000, #000000, #ff0000);
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #000000, #ff0000, #000000, #ff3333, #000000);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: sparkle 3s linear infinite;
-            filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.5));
         }
 
         @keyframes sparkle {
@@ -91,164 +92,122 @@
             100% { background-position: 200% center; }
         }
 
-        /* CONTAINER CHÍNH CÓ BLUR */
-        .container {
-            width: 100%;
-            max-width: 650px;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            margin-bottom: 30px;
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        /* MENU 3 GẠCH (SIDEBAR) */
         .menu-btn {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            width: 50px;
-            height: 50px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.4rem;
             cursor: pointer;
-            z-index: 1000;
-            color: white;
-            font-size: 1.2rem;
+            transition: transform 0.2s;
         }
 
-        .menu-btn:hover {
-            background: white;
-            color: black;
+        /* Menu 3 gạch thả xuống */
+        .nav-menu {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            padding: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
         }
 
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -280px;
-            width: 280px;
-            height: 100vh;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-left: 1px solid var(--border-color);
-            z-index: 999;
-            padding: 90px 20px 20px 20px;
+        .nav-menu.active {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .menu-item i {
+            font-size: 1.1rem;
+        }
+
+        .menu-item.tiktok i { color: #ff0050; }
+        .menu-item.discord i { color: #5865F2; }
+
+        /* Nội dung chính */
+        main {
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 25px;
+            flex: 1;
         }
 
-        .sidebar.active {
-            right: 0;
-        }
-
-        .menu-link {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            border-radius: 12px;
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid transparent;
-        }
-
-        .menu-link:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: var(--border-color);
-            transform: translateX(-5px);
-        }
-
-        .menu-link i {
-            font-size: 1.3rem;
-            width: 25px;
-            text-align: center;
-        }
-        .menu-link.tiktok i { color: #ff0050; }
-        .menu-link.discord i { color: #5865F2; }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(4px);
-            display: none;
-            z-index: 998;
-        }
-        .overlay.active { display: block; }
-
-        /* TABS ANIMATION SYSTEM */
-        .tabs-header {
-            display: flex;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 14px;
-            padding: 6px;
-            margin-bottom: 25px;
-            position: relative;
+        /* Khu vực Script chính có Tab */
+        .script-section {
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .tab-headers {
+            display: flex;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 16px;
+            position: relative;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 12px;
             background: none;
             border: none;
-            color: var(--text-sub);
+            color: #888;
+            padding: 10px;
+            font-size: 0.85rem;
             font-weight: 600;
-            font-size: 0.95rem;
             cursor: pointer;
-            z-index: 2;
-            position: relative;
+            z-index: 1;
+            transition: color 0.2s ease;
         }
 
         .tab-btn.active {
-            color: #000000;
+            color: #fff;
         }
 
-        /* Thanh trượt chọn Tab mượt mà */
+        /* Thanh trượt di chuyển giữa các tab (Mượt 120Hz) */
         .tab-indicator {
             position: absolute;
-            top: 6px;
-            left: 6px;
-            height: calc(100% - 12px);
-            width: calc(50% - 9px);
-            background: #ffffff;
-            border-radius: 10px;
-            z-index: 1;
-            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            top: 4px;
+            left: 4px;
+            height: calc(100% - 8px);
+            width: calc(50% - 4px);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* KHU VỰC CHỨA SCRIPT */
         .tab-content {
             display: none;
-            animation: fadeIn 0.4s ease forwards;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .tab-content.active {
@@ -256,89 +215,242 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .script-box {
-            position: relative;
-            background: rgba(0, 0, 0, 0.4);
+        /* Khu vực riêng của Blox Fruit */
+        .blox-fruit-section {
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 55px 20px 20px 20px;
-            overflow: hidden;
+            border-radius: 16px;
+            padding: 16px;
         }
 
-        .script-box textarea {
-            width: 100%;
-            height: 100px;
-            background: transparent;
-            border: none;
-            color: #dddddd;
-            font-family: 'Courier New', Courier, monospace;
+        .section-title {
             font-size: 0.9rem;
-            resize: none;
-            outline: none;
-            line-height: 1.5;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        /* NÚT COPY ĐẦU Ô SCRIPT */
-        .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.08);
+        .sub-tab-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #eee;
+        }
+
+        /* Hộp chứa Ô chứa Code và Nút Copy ở đầu */
+        .code-container {
+            position: relative;
+            background: #050505;
             border: 1px solid var(--border-color);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 5px;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: #aaa;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .copy-btn:hover {
-            background: #ffffff;
-            color: #000000;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
         }
 
-        .box-tag {
-            position: absolute;
-            top: 15px;
-            left: 20px;
+        /* Hiệu ứng nút khi đã Copy thành công */
+        .copy-btn.copied {
+            background: rgba(0, 200, 80, 0.2);
+            border-color: #00c850;
+            color: #00c850;
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        code {
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-family: monospace;
             font-size: 0.75rem;
-            color: var(--text-sub);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
+            color: #ccc;
+            max-height: 100px;
+            overflow-y: auto;
+            line-height: 1.4;
+            padding-right: 5px;
         }
 
-        /* RESPONSIVE TRÊN ĐIỆN THOẠI */
-        @media (max-width: 600px) {
-            body { padding: 20px 15px; }
-            .web-title { font-size: 1.8rem; }
-            .container { padding: 20px; border-radius: 20px; }
-            .menu-btn { top: 15px; right: 15px; width: 45px; height: 45px; }
-            .tab-btn { font-size: 0.85rem; padding: 10px; }
+        /* Tùy chỉnh thanh cuộn nhỏ gọn */
+        code::-webkit-scrollbar, .phone-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        code::-webkit-scrollbar-thumb, .phone-container::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
 
-    <div class="menu-btn" onclick="toggleMenu()">
-        <i class="fa-solid fa-bars"></i>
+    <div class="phone-container">
+        <header>
+            <div class="web-title">KaiZonHub / Website</div>
+            <button class="menu-btn" id="menuToggle" aria-label="Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="https://tiktok.com/@usertd1609" target="_blank" class="menu-item tiktok">
+                    <i class="fa-brands fa-tiktok"></i> Tiktok
+                </a>
+                <a href="https://discord.gg/GqXCVwkn7" target="_blank" class="menu-item discord">
+                    <i class="fa-brands fa-discord"></i> Discord
+                </a>
+            </div>
+        </header>
+
+        <main>
+            <div class="script-section">
+                <div class="tab-headers">
+                    <div class="tab-indicator" id="indicator"></div>
+                    <button class="tab-btn active" onclick="switchTab(0, this)">KaiZonHub</button>
+                    <button class="tab-btn" onclick="switchTab(1, this)">KaiZonHub | Auto Tech</button>
+                </div>
+
+                <div class="tab-content active" id="tab0">
+                    <div class="code-container">
+                        <div class="code-header">
+                            <button class="copy-btn" onclick="copyScript(this, 'script1')">
+                                <i class="fa-regular fa-copy"></i> <span>Copy Script</span>
+                            </button>
+                        </div>
+                        <code id="script1">loadstring(game:HttpGet("https://raw.githubusercontent.com/KaiZon189/ThanhDuyHub-Model/refs/heads/main/KaiZonHub"))()</code>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab1">
+                    <div class="code-container">
+                        <div class="code-header">
+                            <button class="copy-btn" onclick="copyScript(this, 'script2')">
+                                <i class="fa-regular fa-copy"></i> <span>Copy Script</span>
+                            </button>
+                        </div>
+                        <code id="script2">loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/8d6150f8cadccb27861339da3340df23f855488c3886d8e419028833c38d261e/download"))()</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blox-fruit-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-gamepad"></i> Blox Fruit
+                </div>
+                <div class="sub-tab-title">Var Hub</div>
+                <div class="code-container">
+                    <div class="code-header">
+                        <button class="copy-btn" onclick="copyScript(this, 'script3')">
+                            <i class="fa-regular fa-copy"></i> <span>Copy Script</span>
+                        </button>
+                    </div>
+                    <code id="script3">repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-ModScript/Var-Hubs/refs/heads/main/Var%20Hub"))()</code>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <div class="overlay" onclick="toggleMenu()"></div>
-    <div class="sidebar" id="sidebar">
-        <a href="https://tiktok.com/@usertd1609" target="_blank" class="menu-link tiktok">
-            <i class="fa-brands fa-tiktok"></i> TikTok cá nhân
-        </a>
-        <a href="https://discord.gg/GqXCVwkn7" target="_blank" class="menu-link discord">
+    <script>
+        // Xử lý ẩn hiện Menu 3 gạch
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if(navMenu.style.display === 'flex') {
+                navMenu.classList.remove('active');
+                setTimeout(() => navMenu.style.display = 'none', 250);
+            } else {
+                navMenu.style.display = 'flex';
+                requestAnimationFrame(() => navMenu.classList.add('active'));
+            }
+        });
+
+        document.addEventListener('click', () => {
+            if(navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                setTimeout(() => navMenu.style.display = 'none', 250);
+            }
+        });
+
+        // Xử lý chuyển đổi Tab mượt (Tối ưu phản hồi nhanh 120Hz)
+        function switchTab(tabIndex, btn) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            const indicator = document.getElementById('indicator');
+
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Di chuyển thanh background indicator của tab
+            indicator.style.transform = `translateX(${tabIndex * 100}%)`;
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab${tabIndex}`).classList.add('active');
+        }
+
+        // Xử lý chức năng Copy và hiệu ứng lấp lánh phản hồi thành công
+        function copyScript(button, elementId) {
+            const codeText = document.getElementById(elementId).innerText;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                const textSpan = button.querySelector('span');
+                const icon = button.querySelector('i');
+                
+                button.classList.add('copied');
+                textSpan.innerText = 'Copied!';
+                icon.className = 'fa-solid fa-check';
+
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    textSpan.innerText = 'Copy Script';
+                    icon.className = 'fa-regular fa-copy';
+                }, 2000);
+            }).catch(err => {
+                console.error('Không thể copy script: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
+wkn7" target="_blank" class="menu-link discord">
             <i class="fa-brands fa-discord"></i> Tham gia Discord
         </a>
     </div>
