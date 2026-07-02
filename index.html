@@ -4,36 +4,415 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KaiZonHub / Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Import Font */
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-
         :root {
-            --bg-color: #f5f5f5;
-            --text-color: #111111;
-            --container-bg: rgba(255, 255, 255, 0.8);
-            --border-color: #dddddd;
-            --btn-bg: #111111;
-            --btn-text: #ffffff;
-            --btn-hover: #333333;
-            --font-main: 'Outfit', sans-serif; /* Clean, modern font similar to Gemini's */
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #0a0a0a;
-                --text-color: #ffffff;
-                --container-bg: rgba(20, 20, 20, 0.7);
-                --border-color: #333333;
-                --btn-bg: #ffffff;
-                --btn-text: #000000;
-                --btn-hover: #cccccc;
-            }
+            --bg-color: #0a0a0a;
+            --container-bg: rgba(18, 18, 18, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-sub: #a0a0a0;
+            --accent-red: #ff3333;
+            --accent-dark-red: #8b0000;
+            --blur-amount: 16px;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background grid mượt mà không lỗi */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: -1;
+        }
+
+        /* Menu 3 gạch (Hamburger) */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 10px;
+            z-index: 100;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-toggle span {
+            width: 100%;
+            height: 2px;
+            background-color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        /* Sidebar chứa link */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-right: 1px solid var(--border-color);
+            z-index: 99;
+            padding: 80px 20px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar.active {
+            transform: translateX(280px);
+        }
+
+        /* Biến đổi nút 3 gạch khi mở sidebar */
+        .menu-toggle.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+        .sidebar-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-btn:hover {
+            background: var(--text-main);
+            color: var(--bg-color);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+        }
+
+        /* Tiêu đề Đỏ Đen Lấp Lánh */
+        .site-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #000000, var(--accent-red), #000000);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* Glassmorphism Card */
+        .card {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-sub);
+            margin-bottom: 15px;
+            padding-left: 5px;
+            border-left: 3px solid var(--text-main);
+        }
+
+        /* Tabs System mượt mà cho 120Hz */
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 6px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: background-color, color;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+        }
+
+        .tab-content {
+            display: none;
+            animation: tabFade 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes tabFade {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sửa lỗi hiển thị ô Script & Nút copy */
+        .script-box-container {
+            position: relative;
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .script-actions {
+            display: flex;
+            justify-content: flex-end;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--text-main);
+            color: var(--bg-color);
+        }
+
+        /* Fix lỗi chữ bị tràn, lỗi cuộn ngang trong video của bạn */
+        .script-code-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            padding: 14px;
+        }
+
+        .script-code {
+            font-family: 'Fira Code', 'Courier New', Menlo, Monaco, monospace;
+            font-size: 0.8rem;
+            color: #ccc;
+            white-space: pre; /* Giữ nguyên cấu trúc code dòng đơn */
+            word-wrap: normal;
+            overflow-wrap: normal;
+            display: block;
+            line-height: 1.5;
+        }
+
+        /* Tùy chỉnh thanh cuộn mượt mà mỏng gọn */
+        .script-code-wrapper::-webkit-scrollbar {
+            height: 4px;
+        }
+        .script-code-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .script-code-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Khóa nhấp nháy toàn trang */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tối ưu hóa phản hồi chạm cho Mobile và màn hình tần số quét cao (120Hz) */
+        @media (match-media: -webkit-device-pixel-ratio) {
+            body { -webkit-overflow-scrolling: touch; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <a href="https://tiktok.com/@usertd1609" target="_blank" class="sidebar-btn">TikTok</a>
+        <a href="https://discord.gg/GqXCVwkn7" target="_blank" class="sidebar-btn">Discord</a>
+    </div>
+
+    <div class="main-container">
+        
+        <h1 class="site-title">KaiZonHub / Website</h1>
+
+        <div class="card">
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab(event, 'tab1')">KaiZonHub</button>
+                <button class="tab-btn" onclick="switchTab(event, 'tab2')">KaiZonHub | Auto Tech</button>
+            </div>
+
+            <div id="tab1" class="tab-content active">
+                <div class="script-box-container">
+                    <div class="script-actions">
+                        <button class="copy-btn" onclick="copyScript('script1', this)">Copy</button>
+                    </div>
+                    <div class="script-code-wrapper">
+                        <code class="script-code" id="script1">loadstring(game:HttpGet("https://raw.githubusercontent.com/KaiZon189/ThanhDuyHub-Model/refs/heads/main/KaiZonHub"))()</code>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab2" class="tab-content">
+                <div class="script-box-container">
+                    <div class="script-actions">
+                        <button class="copy-btn" onclick="copyScript('script2', this)">Copy</button>
+                    </div>
+                    <div class="script-code-wrapper">
+                        <code class="script-code" id="script2">loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/8d6150f8cadccb27861339da3340df23f855488c3886d8e419028833c38d261e/download"))()</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Blox Fruit</h2>
+            <div class="script-box-container">
+                <div class="script-actions">
+                    <button class="copy-btn" onclick="copyScript('script-bf', this)">Copy</button>
+                </div>
+                <div class="script-code-wrapper">
+                    <code class="script-code" id="script-bf">repeat wait() until game:IsLoaded() and game.Players.LocalPlayer&#10;loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-ModScript/Var-Hubs/refs/heads/main/Var%20Hub"))()</code>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Xử lý chuyển đổi Tab mượt mà
+        function switchTab(event, tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Xử lý đóng/mở Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.menu-toggle');
+            sidebar.classList.toggle('active');
+            toggleBtn.classList.toggle('active');
+        }
+
+        // Chức năng Sao chép chuẩn xác và phản hồi trực quan
+        function copyScript(elementId, button) {
+            const codeText = document.getElementById(elementId).innerText;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                const originalText = button.innerText;
+                button.innerText = 'Copied!';
+                button.style.background = '#ffffff';
+                button.style.color = '#000000';
+                
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.style.background = '';
+                    button.style.color = '';
+                }, 1500);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        // Đóng sidebar khi click ra ngoài màn hình nhằm tăng trải nghiệm UI
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.menu-toggle');
+            if (!sidebar.contains(event.target) && !toggleBtn.contains(event.target) && sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                toggleBtn.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
             box-sizing: border-box;
             font-family: var(--font-main);
         }
