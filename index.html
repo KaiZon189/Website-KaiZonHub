@@ -3,197 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaiZonHub / Website</title>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>KaiZonHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --bg-color: #0a0a0a;
-            --card-bg: rgba(20, 20, 20, 0.7);
-            --text-color: #ffffff;
-            --accent-color: #ff3333;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-sub: #b3b3b3;
+            --accent-gradient: linear-gradient(45deg, #ff0000, #000000);
+            --blur-strength: 16px;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Geist', sans-serif;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
-        }
-
-        /* Giới hạn hiển thị máy tính giống hệt điện thoại */
-        .phone-container {
-            width: 100%;
-            max-width: 412px;
-            height: 100vh;
-            max-height: 892px;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            overflow-x: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        @media (min-width: 415px) {
-            .phone-container {
-                border-radius: 40px;
-                height: 85vh;
-            }
-        }
-
-        /* Thanh điều hướng Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background: rgba(10, 10, 10, 0.6);
-            backdrop-filter: blur(10px);
-            z-index: 10;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 0, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 40%);
         }
 
-        /* Hiệu ứng tên Đỏ Đen lấp lánh */
-        .web-title {
-            font-size: 1.2rem;
-            font-weight: 700;
+        /* Container chính hỗ trợ responsive */
+        .container {
+            width: 100%;
+            max-width: 650px;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        /* Tiêu đề Đỏ Đen */
+        .header-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            background: linear-gradient(90deg, #000000, #ff0000, #000000, #ff3333, #000000);
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #ff0000, #555555, #000000);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: sparkle 3s linear infinite;
+            animation: shine 4s linear infinite;
         }
 
-        @keyframes sparkle {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
+        /* Card chung sử dụng hiệu ứng Blur */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        .menu-btn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        /* Menu 3 gạch thả xuống */
-        .nav-menu {
-            position: absolute;
-            top: 70px;
-            right: 20px;
-            background: rgba(15, 15, 15, 0.95);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(15px);
-            border-radius: 12px;
-            padding: 10px;
-            display: none;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 100;
-            transform: translateY(-10px);
-            opacity: 0;
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
-        }
-
-        .nav-menu.active {
-            display: flex;
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .menu-item {
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ff3333;
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 20px;
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 0.95rem;
-            border-radius: 8px;
-            transition: background 0.2s;
+            gap: 8px;
         }
 
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .menu-item i {
-            font-size: 1.1rem;
-        }
-
-        .menu-item.tiktok i { color: #ff0050; }
-        .menu-item.discord i { color: #5865F2; }
-
-        /* Nội dung chính */
-        main {
-            padding: 20px;
+        /* Hệ thống Tabs Mượt Mà (120Hz/Animation) */
+        .tabs-nav {
             display: flex;
-            flex-direction: column;
-            gap: 25px;
-            flex: 1;
-        }
-
-        /* Khu vực Script chính có Tab */
-        .script-section {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 16px;
-        }
-
-        .tab-headers {
-            display: flex;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 8px;
-            padding: 4px;
-            margin-bottom: 16px;
             position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 20px;
         }
 
         .tab-btn {
             flex: 1;
             background: none;
             border: none;
-            color: #888;
-            padding: 10px;
-            font-size: 0.85rem;
+            color: var(--text-sub);
+            padding: 12px;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
+            position: relative;
             z-index: 1;
-            transition: color 0.2s ease;
+            transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .tab-btn.active {
-            color: #fff;
+            color: #ffffff;
         }
 
-        /* Thanh trượt di chuyển giữa các tab (Mượt 120Hz) */
-        .tab-indicator {
+        /* Thanh trượt tab chạy mượt */
+        .tabs-nav .slider {
             position: absolute;
             top: 4px;
             left: 4px;
@@ -201,146 +123,225 @@
             width: calc(50% - 4px);
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 7px;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
         }
 
+        /* Nội dung tab ẩn/hiện chuyển động mượt */
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            will-change: transform, opacity;
         }
 
         .tab-content.active {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Khu vực riêng của Blox Fruit */
-        .blox-fruit-section {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 16px;
-        }
-
-        .section-title {
-            font-size: 0.9rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .sub-tab-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #eee;
-        }
-
-        /* Hộp chứa Ô chứa Code và Nút Copy ở đầu */
-        .code-container {
+        /* Ô chứa Script & Nút Copy */
+        .script-box {
             position: relative;
-            background: #050505;
-            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            padding: 12px;
-            margin-top: 5px;
+            padding: 15px;
+            padding-top: 50px; /* Nhường chỗ cho nút copy ở đầu */
+            margin-top: 10px;
         }
 
-        .code-header {
-            display: flex;
-            justify-content: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .copy-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            color: #aaa;
+        .btn-copy {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
             padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 600;
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
 
-        .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+        .btn-copy:hover {
+            background: #ffffff;
+            color: #000000;
         }
 
-        /* Hiệu ứng nút khi đã Copy thành công */
-        .copy-btn.copied {
-            background: rgba(0, 200, 80, 0.2);
-            border-color: #00c850;
-            color: #00c850;
-            animation: pop 0.3s ease;
+        .btn-copy:active {
+            transform: scale(0.95);
         }
 
-        @keyframes pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-
-        code {
-            display: block;
+        .script-code {
+            width: 100%;
+            height: 80px;
+            background: transparent;
+            border: none;
+            color: #00ff66; /* Màu xanh neon kiểu coder nổi bật */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            resize: none;
+            outline: none;
             white-space: pre-wrap;
             word-break: break-all;
-            font-family: monospace;
-            font-size: 0.75rem;
-            color: #ccc;
-            max-height: 100px;
-            overflow-y: auto;
-            line-height: 1.4;
-            padding-right: 5px;
         }
 
-        /* Tùy chỉnh thanh cuộn nhỏ gọn */
-        code::-webkit-scrollbar, .phone-container::-webkit-scrollbar {
-            width: 4px;
+        /* Toast thông báo đã Copy thành công */
+        .toast {
+            position: fixed;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            color: #000000;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 999;
         }
-        code::-webkit-scrollbar-thumb, .phone-container::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+
+        .toast.show {
+            bottom: 30px;
+        }
+
+        /* Keyframes Animations mượt mà */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Tối ưu hóa cho thiết bị di động */
+        @media (max-width: 480px) {
+            .header-title { font-size: 2rem; }
+            .card { padding: 16px; }
+            .tab-btn { font-size: 0.85rem; padding: 10px; }
+            .script-code { font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="phone-container">
-        <header>
-            <div class="web-title">KaiZonHub / Website</div>
-            <button class="menu-btn" id="menuToggle" aria-label="Menu">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            
-            <div class="nav-menu" id="navMenu">
-                <a href="https://tiktok.com/@usertd1609" target="_blank" class="menu-item tiktok">
-                    <i class="fa-brands fa-tiktok"></i> Tiktok
-                </a>
-                <a href="https://discord.gg/GqXCVwkn7" target="_blank" class="menu-item discord">
-                    <i class="fa-brands fa-discord"></i> Discord
-                </a>
-            </div>
-        </header>
+    <div class="container">
+        <h1 class="header-title">KaiZonHub</h1>
 
-        <main>
-            <div class="script-section">
-                <div class="tab-headers">
+        <div class="card">
+            <div class="tabs-nav">
+                <div class="slider" id="tabSlider"></div>
+                <button class="tab-btn active" onclick="switchTab(0, this)">KaiZonHub</button>
+                <button class="tab-btn" onclick="switchTab(1, this)">KaiZonHub | Auto Tech</button>
+            </div>
+
+            <div class="tab-content active" id="tab0">
+                <div class="script-box">
+                    <button class="btn-copy" onclick="copyScript('script1', this)">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+                    <textarea class="script-code" id="script1" readonly>loadstring(game:HttpGet("https://raw.githubusercontent.com/KaiZon189/ThanhDuyHub-Model/refs/heads/main/KaiZonHub"))()</textarea>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab1">
+                <div class="script-box">
+                    <button class="btn-copy" onclick="copyScript('script2', this)">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+                    <textarea class="script-code" id="script2" readonly>loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/8d6150f8cadccb27861339da3340df23f855488c3886d8e419028833c38d261e/download"))()</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">
+                <i class="fa-solid fa-gamepad"></i> Blox Fruit
+            </div>
+            <div style="font-size: 0.9rem; color: var(--text-sub); margin-bottom: 10px; font-weight: 600;">Tab 1: Var Hub</div>
+            <div class="script-box">
+                <button class="btn-copy" onclick="copyScript('scriptBloxFruit', this)">
+                    <i class="fa-regular fa-copy"></i> Copy
+                </button>
+                <textarea class="script-code" id="scriptBloxFruit" readonly style="height: 100px;">repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-ModScript/Var-Hubs/refs/heads/main/Var%20Hub"))()</textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toastNotification">Đã sao chép vào bộ nhớ tạm!</div>
+
+    <script>
+        // Xử lý chuyển đổi Tab mượt mà với Animation thanh trượt
+        function switchTab(tabIndex, element) {
+            // Cập nhật vị trí thanh trượt nền (Slider)
+            const slider = document.getElementById('tabSlider');
+            if (tabIndex === 0) {
+                slider.style.transform = 'translateX(0%)';
+            } else {
+                slider.style.transform = 'translateX(100%)';
+            }
+
+            // Đổi active class cho nút bấm
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            // Đổi active cho nội dung Tab
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Delay nhẹ tạo animation mượt mà
+            setTimeout(() => {
+                const activeContent = document.getElementById(`tab${tabIndex}`);
+                activeContent.classList.add('active');
+            }, 50);
+        }
+
+        // Chức năng Copy Script và tạo phản hồi trực quan
+        function copyScript(elementId, button) {
+            const copyText = document.getElementById(elementId);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // Dành cho điện thoại
+
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                // Đổi giao diện nút bấm tạm thời
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fa-solid fa-check" style="color: #00ff66;"></i> Copied!';
+                button.style.background = 'rgba(0, 255, 102, 0.15)';
+                
+                // Hiện Toast thông báo
+                const toast = document.getElementById('toastNotification');
+                toast.classList.add('show');
+
+                // Trả lại trạng thái cũ sau 2 giây
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.style.background = '';
+                    toast.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                alert('Có lỗi xảy ra khi copy script!');
+            });
+        }
+    </script>
+</body>
+</html>
+b-headers">
                     <div class="tab-indicator" id="indicator"></div>
                     <button class="tab-btn active" onclick="switchTab(0, this)">KaiZonHub</button>
                     <button class="tab-btn" onclick="switchTab(1, this)">KaiZonHub | Auto Tech</button>
