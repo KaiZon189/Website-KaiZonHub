@@ -4,36 +4,456 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KaiZonHub / Website</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Tối ưu hóa 120Hz và Reset */
+        /* Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             -webkit-tap-highlight-color: transparent;
-            /* Tối ưu hóa mượt mà cho màn hình quét cao */
-            will-change: transform, opacity;
         }
 
         body {
-            background-color: #0a0a0a;
+            background: #0a0a0a;
             color: #ffffff;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             padding: 20px;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Nền hiệu ứng đốm mờ phía sau */
+        /* Background đốm mờ nghệ thuật (Blur) */
         body::before {
             content: '';
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header */
+        header {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Menu 3 gạch */
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 100;
+        }
+
+        .menu-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Sidebar điều hướng (Menu ẩn) */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            height: 100%;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: -5px 0 30px rgba(0,0,0,0.5);
+            z-index: 99;
+            padding: 80px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .sidebar-link i {
+            font-size: 1.3rem;
+            width: 25px;
+        }
+
+        /* Overlay khi mở menu */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 98;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Container chính */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            will-change: transform; /* Tối ưu hóa 120Hz mượt mà */
+        }
+
+        /* Thẻ Section bọc ngoài */
+        .section-box {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e0e0e0;
+        }
+
+        /* Hệ thống Tab liên tục (Animation chạy mượt) */
+        .tabs-nav {
+            display: flex;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 6px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #888;
+            padding: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tab-btn.active {
+            color: #fff;
+        }
+
+        /* Thanh trượt của Tab di chuyển mượt mà */
+        .tab-indicator {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            height: calc(100% - 12px);
+            width: calc(50% - 6px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            z-index: 1;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Vùng nội dung Tab */
+        .tab-content {
+            display: none;
+            animation: contentFade 0.4s ease both;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes contentFade {
+            from { opacity: 0; transform: scale(0.99); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Hộp đựng Script */
+        .script-container {
+            position: relative;
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 55px 15px 15px 15px; /* Chừa khoảng trống phía trên cho nút copy */
+            margin-top: 10px;
+        }
+
+        /* Nút Copy đặt ở ĐẦU ô Script */
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #ffffff;
+            color: #000;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Textarea hiển thị code */
+        .script-box {
+            width: 100%;
+            height: 100px;
+            background: transparent;
+            border: none;
+            color: #aaa;
+            font-family: monospace;
+            font-size: 0.85rem;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+            padding-right: 5px;
+        }
+
+        /* Tùy chỉnh thanh cuộn nhỏ gọn */
+        .script-box::-webkit-scrollbar {
+            width: 4px;
+        }
+        .script-box::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        /* Responsive cho Mobile */
+        @media (max-width: 600px) {
+            body { padding: 15px; }
+            .section-box { padding: 20px 15px; }
+            .tab-btn { font-size: 0.85rem; padding: 10px 5px; }
+            .logo { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <header>
+        <div class="logo">KaiZonHub / Website</div>
+        <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <a href="https://tiktok.com/@usertd1609" target="_blank" class="sidebar-link">
+            <i class="fa-brands fa-tiktok"></i> Tiktok của tôi
+        </a>
+        <a href="https://discord.gg/GqXCVwkn7" target="_blank" class="sidebar-link">
+            <i class="fa-brands fa-discord"></i> Discord của tôi
+        </a>
+    </div>
+
+    <div class="container">
+
+        <div class="section-box">
+            <div class="section-title">
+                <i class="fa-solid fa-code"></i> Hệ Thống Script Chính
+            </div>
+            
+            <div class="tabs-nav">
+                <div class="tab-indicator" id="indicator"></div>
+                
+                <button class="tab-btn active" onclick="switchTab(0)">KaiZonHub</button>
+                <button class="tab-btn" onclick="switchTab(1)">KaiZonHub | Auto Tech</button>
+            </div>
+
+            <div class="tab-content active" id="tab-content-0">
+                <div class="script-container">
+                    <button class="copy-btn" onclick="copyScript('script1', this)">
+                        <i class="fa-regular fa-copy"></i> Copy Script
+                    </button>
+                    <textarea class="script-box" id="script1" readonly>loadstring(game:HttpGet("https://raw.githubusercontent.com/KaiZon189/ThanhDuyHub-Model/refs/heads/main/KaiZonHub"))()</textarea>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-content-1">
+                <div class="script-container">
+                    <button class="copy-btn" onclick="copyScript('script2', this)">
+                        <i class="fa-regular fa-copy"></i> Copy Script
+                    </button>
+                    <textarea class="script-box" id="script2" readonly>loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/8d6150f8cadccb27861339da3340df23f855488c3886d8e419028833c38d261e/download"))()</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box" style="animation-delay: 0.1s;">
+            <div class="section-title">
+                <i class="fa-solid fa-gamepad"></i> Blox Fruit Script
+            </div>
+            
+            <div class="tabs-nav" style="background: rgba(255,255,255,0.02)">
+                <div class="tab-indicator" style="width: calc(100% - 12px);"></div>
+                <button class="tab-btn active" style="color: #fff; cursor: default;">Var Hub</button>
+            </div>
+
+            <div class="script-container">
+                <button class="copy-btn" onclick="copyScript('script3', this)">
+                    <i class="fa-regular fa-copy"></i> Copy Script
+                </button>
+                <textarea class="script-box" id="script3" readonly style="height: 110px;">repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-ModScript/Var-Hubs/refs/heads/main/Var%20Hub"))()</textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Hàm đóng/mở Menu 3 gạch
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        // Hàm chuyển đổi Tab kèm animation trượt mượt mà (Tối ưu phản hồi nhanh cho màn hình 120Hz)
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            const indicator = document.getElementById('indicator');
+
+            tabs.forEach((tab, i) => {
+                if(i === index) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            contents.forEach((content, i) => {
+                if(i === index) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+
+            // Tính toán vị trí dịch chuyển thanh trượt nền tab
+            indicator.style.transform = `translateX(${index * 100}%)`;
+        }
+
+        // Hàm xử lý copy nhanh
+        function copyScript(id, btn) {
+            const copyText = document.getElementById(id);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // Dành cho điện thoại
+
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                // Đổi icon và chữ báo copy thành công
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-check" style="color: #2ecc71;"></i> Copied!`;
+                btn.style.background = "rgba(46, 204, 113, 0.15)";
+                btn.style.borderColor = "rgba(46, 204, 113, 0.4)";
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = "";
+                    btn.style.borderColor = "";
+                }, 2000);
+            }).catch(err => {
+                alert("Lỗi không thể copy tự động, vui lòng tự bôi đen code!");
+            });
+        }
+    </script>
+</body>
+</html>
             position: absolute;
             width: 300px;
             height: 300px;
